@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "pdfReader (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "pdfReader (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

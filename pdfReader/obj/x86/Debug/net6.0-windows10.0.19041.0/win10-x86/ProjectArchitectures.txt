@@ -1,0 +1,1 @@
+C:\Users\alonv\Projects\pdfReader\pdfReader\pdfReader.csproj;x86
