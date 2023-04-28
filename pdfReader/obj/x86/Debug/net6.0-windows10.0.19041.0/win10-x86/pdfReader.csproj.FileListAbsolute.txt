@@ -284,3 +284,8 @@ C:\Users\alonv\Projects\pdfReader\pdfReader\obj\x86\Debug\net6.0-windows10.0.190
 C:\Users\alonv\Projects\pdfReader\pdfReader\obj\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\qualifiers.txt.intermediate
 C:\Users\alonv\Projects\pdfReader\pdfReader\obj\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\MultipleQualifiersPerDimensionFound.txt
 C:\Users\alonv\Projects\pdfReader\pdfReader\obj\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\ProjectArchitectures.txt
+C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Google.Apis.dll
+C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Google.Apis.Auth.PlatformServices.dll
+C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Google.Apis.Auth.dll
+C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Google.Apis.Core.dll
+C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Newtonsoft.Json.dll

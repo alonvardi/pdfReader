@@ -27,6 +27,11 @@ using static pdfReader.MainWindow;
 using Windows.Data.Pdf;
 using Windows.Storage.Streams;
 using System.Threading.Tasks;
+using System.Threading.Channels;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using Windows.Graphics.Imaging;
 
 namespace pdfReader
 {
@@ -65,6 +70,7 @@ namespace pdfReader
                 using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
                 {
                     _pdfDocument = await PdfDocument.LoadFromStreamAsync(fileStream);
+
                 }
 
                 // Render the first page of the PDF document
@@ -87,9 +93,19 @@ namespace pdfReader
                 BitmapImage bitmap = new BitmapImage();
                 await bitmap.SetSourceAsync(stream);
                 PdfImage.Source = bitmap;
+                byte[] dataImage = await InMemoryRandomAccessStreamToByteArray(stream);
+                await ocrWithGoogle(dataImage);
+
             }
         }
-
+        private async Task<byte[]> InMemoryRandomAccessStreamToByteArray(InMemoryRandomAccessStream stream)
+        {
+            var dataReader = new DataReader(stream.GetInputStreamAt(0));
+            var bytes = new byte[stream.Size];
+            await dataReader.LoadAsync((uint)stream.Size);
+            dataReader.ReadBytes(bytes);
+            return bytes;
+        }
         private async void PdfScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
             if (PdfScrollViewer.VerticalOffset == 0 && _currentPageIndex > 0)
@@ -115,8 +131,54 @@ namespace pdfReader
 
             }
         }
+        
 
 
+        private async Task ocrWithGoogle(byte[] bitmapSource)
+        {
+            string base64Image = Convert.ToBase64String(bitmapSource);
+            string apiKey = "AIzaSyCx_BMdOZfxVFeObjDX1erlQDx3V6Z6ido";
+            string visionApiUrl = $"https://vision.googleapis.com/v1/images:annotate?key={apiKey}";
+
+            var jsonRequestData = new
+            {
+                requests = new[]
+    {
+        new
+        {
+            image = new
+            {
+                content = base64Image
+            },
+            features = new[]
+            {
+                new
+                {
+                    type = "TEXT_DETECTION"
+                }
+            }
+        }
+    }
+            };
+
+            string jsonString = JsonSerializer.Serialize(jsonRequestData);
+
+            using HttpClient httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.PostAsync(
+                visionApiUrl,
+                new StringContent(jsonString, Encoding.UTF8, "application/json"));
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("OCR Response: " + responseContent);
+            }
+            else
+            {
+                Debug.WriteLine("An error occurred: " + response.ReasonPhrase);
+            }
+
+        }
 
 
 
