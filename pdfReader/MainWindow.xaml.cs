@@ -34,6 +34,14 @@ using System.Text.Json;
 using Windows.Graphics.Imaging;
 using Newtonsoft.Json;
 using static Google.Apis.Requests.BatchRequest;
+using System.Drawing;
+using ABI.Windows.Foundation;
+using static System.Net.Mime.MediaTypeNames;
+using System.Drawing.Imaging;
+using Microsoft.UI;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Shapes;
 
 namespace pdfReader
 {
@@ -43,6 +51,7 @@ namespace pdfReader
         private int _currentPageIndex = 0;
         private PdfDocument _pdfDocument;
         private static GoogleOCRResponse googleOCRResponse = null;
+        private BitmapImage bitmap;
         public MainWindow()
         {
             this.InitializeComponent();
@@ -90,7 +99,7 @@ namespace pdfReader
             using (InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
                 await page.RenderToStreamAsync(stream);
-                BitmapImage bitmap = new BitmapImage();
+                bitmap = new BitmapImage();
                 await bitmap.SetSourceAsync(stream);
                 PdfImage.Source = bitmap;
                 byte[] dataImage = await InMemoryRandomAccessStreamToByteArray(stream);
@@ -111,7 +120,7 @@ namespace pdfReader
             if (PdfScrollViewer.VerticalOffset == 0 && _currentPageIndex > 0)
             {
                 // Scroll to the bottom of the new page
-                PdfScrollViewer.ChangeView(null, PdfScrollViewer.ScrollableHeight-1, null);
+                PdfScrollViewer.ChangeView(null, PdfScrollViewer.ScrollableHeight - 1, null);
 
                 // User scrolled to the top, go to the previous page
                 _currentPageIndex--;
@@ -133,7 +142,7 @@ namespace pdfReader
         private async Task ocrWithGoogle(byte[] bitmapSource)
         {
 
-            
+
             string base64Image = Convert.ToBase64String(bitmapSource);
             string apiKey = "AIzaSyCx_BMdOZfxVFeObjDX1erlQDx3V6Z6ido";
             string visionApiUrl = $"https://vision.googleapis.com/v1/images:annotate?key={apiKey}";
@@ -160,7 +169,7 @@ namespace pdfReader
             HttpResponseMessage response = await httpClient.PostAsync(
               visionApiUrl,
               new StringContent(jsonString, Encoding.UTF8, "application/json"));
-            
+
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -192,8 +201,9 @@ namespace pdfReader
 
         }
 
-        public static List<TextAnnotation> FindTextInCoordinates( int xClicked, int yClicked)
+        public static int FindTextInCoordinates(int xClicked, int yClicked)
         {
+            int i = 0;
             var result = new List<TextAnnotation>();
             foreach (var textAnnotation in googleOCRResponse.Responses[0].TextAnnotations)
             {
@@ -204,11 +214,12 @@ namespace pdfReader
 
                 if (xClicked >= xMin && xClicked <= xMax && yClicked >= yMin && yClicked <= yMax)
                 {
-                    result.Add(textAnnotation);
+                    return i;
                 }
+                i++;
             }
 
-            return result;
+            return -1;
         }
 
         private void PdfImage_PointerPressed(object sender, PointerRoutedEventArgs e)
@@ -217,13 +228,20 @@ namespace pdfReader
             int x = (int)position.X;
             int y = (int)position.Y;
 
-            // Find the text at the clicked coordinates
-            List<TextAnnotation> clickedTextAnnotations = FindTextInCoordinates( x, y);
+            int location = FindTextInCoordinates(x, y);
 
-            if (clickedTextAnnotations.Count > 0)
+
+            if (location != -1)
             {
-                var clickedText = clickedTextAnnotations[0];
-                Debug.WriteLine($"Clicked text: {clickedText.Description}, X: {clickedText.BoundingPoly.Vertices[0].X}, Y: {clickedText.BoundingPoly.Vertices[0].Y}");
+                // Find the text at the clicked coordinates
+                TextAnnotation clickedTextAnnotations = googleOCRResponse.Responses[0].TextAnnotations[location];
+                Debug.WriteLine($"Clicked text number {location} description {clickedTextAnnotations.Description}, XMin: {clickedTextAnnotations.BoundingPoly.Vertices[0].X}, YMin: {clickedTextAnnotations.BoundingPoly.Vertices[0].Y} , XMAX{clickedTextAnnotations.BoundingPoly.Vertices[2].X} , YMAX{clickedTextAnnotations.BoundingPoly.Vertices[2].Y}");
+                Debug.WriteLine($"end sentence location {endSentence(location)}");
+                int endOfSentence = endSentence(location);
+                if (endOfSentence != -1)
+                {
+                    markLines(saparateSentenceToLines(location, endOfSentence));
+                }
             }
             else
             {
@@ -231,5 +249,88 @@ namespace pdfReader
             }
         }
 
+
+
+
+        private int endSentence(int wordLocation)
+        {
+            String point = ".";
+            for (int i = wordLocation; i < googleOCRResponse.Responses[0].TextAnnotations.Count; i++)
+            {
+                if (googleOCRResponse.Responses[0].TextAnnotations[i].Description.Contains(point) || googleOCRResponse.Responses[0].TextAnnotations[i].Description[0] == point[0])
+                    return i;
+            }
+            return -1;
+        }
+
+        private List<int[]> saparateSentenceToLines(int wordLocation, int endLocation)
+        {
+            List<int[]> lines = new List<int[]>();
+            int start = wordLocation;
+            const int errorSpace = 5;
+            int[] arr = new int[2];
+            for (int i = wordLocation + 1; i < endLocation; i++)
+            {
+                int yMinSpace = googleOCRResponse.Responses[0].TextAnnotations[i - 1].BoundingPoly.Vertices[0].Y - googleOCRResponse.Responses[0].TextAnnotations[i].BoundingPoly.Vertices[0].Y;
+                int yMaxSpace = googleOCRResponse.Responses[0].TextAnnotations[i - 1].BoundingPoly.Vertices[2].Y - googleOCRResponse.Responses[0].TextAnnotations[i].BoundingPoly.Vertices[2].Y;
+                if (!(yMinSpace >= -errorSpace && yMinSpace <= errorSpace) || !(yMaxSpace >= -errorSpace && yMaxSpace <= errorSpace))
+                {
+                    arr = new int[2];
+                    arr[0] = start;
+                    arr[1] = i - 1;
+                    lines.Add(arr);
+                    start = i;
+                }
+            }
+            arr = new int[2];
+            arr[0] = start;
+            arr[1] = endLocation;
+            lines.Add(arr);
+            return lines;
+        }
+
+        private void markLines(List<int[]> lines)
+        {
+            DrawingCanvas.Children.Clear();
+            foreach (int[] line in lines)
+            {
+                int x, y, width, height;
+                Debug.WriteLine($"line start at {line[0]} and end at {line[1]}");
+                x = googleOCRResponse.Responses[0].TextAnnotations[line[0]].BoundingPoly.Vertices[0].X;
+                y= googleOCRResponse.Responses[0].TextAnnotations[line[0]].BoundingPoly.Vertices[0].Y;
+                width = googleOCRResponse.Responses[0].TextAnnotations[line[1]].BoundingPoly.Vertices[2].X -x;
+                height = googleOCRResponse.Responses[0].TextAnnotations[line[1]].BoundingPoly.Vertices[2].Y-y;
+                
+
+                var rectangle = new Microsoft.UI.Xaml.Shapes.Rectangle
+                {
+                    Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(128, 255, 0, 0)),
+                    Width = width,
+                    Height = height,
+                    Margin = new Thickness(x, y, 0, 0)
+                };
+                DrawingCanvas.Children.Add(rectangle);
+
+            }
+        }
+
+/*        private Image DrawRectangleOnImage(Rectangle rect, Color color, int lineWidth)
+        {
+            // Create a copy of the original image to draw on
+            Image newImage = (Image)PdfImage.Clone();
+
+            // Create a Graphics object from the image
+            using (Graphics graphics = Graphics.FromImage(newImage))
+            {
+                // Create a Pen with the specified color and line width
+                using (Pen pen = new Pen(color, lineWidth))
+                {
+                    // Draw the rectangle on the image
+                    graphics.DrawRectangle(pen, rect);
+                }
+            }
+
+            return newImage;
+        }*/
     }
 }

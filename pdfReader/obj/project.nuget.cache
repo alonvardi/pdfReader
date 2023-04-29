@@ -1,15 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "EyG+5WXTlPvQd/fCDzcr7I2oC+c8wiu+12jaHRgdrDjBHUKUwE0gHsdT94h9Cpk6jQD14j/p9VNaFRVEoOqL3Q==",
+  "dgSpecHash": "5nQtWOsXfqVIi1ymOgyNN/l21Z6YSnQKfN4Hsal4kHui3fMO8wTZ4uJE/T6gbB7Rxd36azC4myGi/7H1PIUMaw==",
   "success": true,
   "projectFilePath": "C:\\Users\\alonv\\Projects\\pdfReader\\pdfReader\\pdfReader.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\alonv\\.nuget\\packages\\google.apis\\1.60.0\\google.apis.1.60.0.nupkg.sha512",
     "C:\\Users\\alonv\\.nuget\\packages\\google.apis.auth\\1.60.0\\google.apis.auth.1.60.0.nupkg.sha512",
     "C:\\Users\\alonv\\.nuget\\packages\\google.apis.core\\1.60.0\\google.apis.core.1.60.0.nupkg.sha512",
+    "C:\\Users\\alonv\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages\\microsoft.windows.sdk.buildtools\\10.0.22621.755\\microsoft.windows.sdk.buildtools.10.0.22621.755.nupkg.sha512",
     "C:\\Users\\alonv\\.nuget\\packages\\microsoft.windowsappsdk\\1.2.221109.1\\microsoft.windowsappsdk.1.2.221109.1.nupkg.sha512",
     "C:\\Users\\alonv\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\alonv\\.nuget\\packages\\system.drawing.common\\7.0.0\\system.drawing.common.7.0.0.nupkg.sha512",
     "C:\\Users\\alonv\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\6.0.16\\microsoft.netcore.app.runtime.win-x86.6.0.16.nupkg.sha512",
     "C:\\Users\\alonv\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.28\\microsoft.windows.sdk.net.ref.10.0.19041.28.nupkg.sha512",
     "C:\\Users\\alonv\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\6.0.16\\microsoft.aspnetcore.app.runtime.win-x86.6.0.16.nupkg.sha512",

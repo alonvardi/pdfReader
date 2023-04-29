@@ -289,3 +289,5 @@ C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.190
 C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Google.Apis.Auth.dll
 C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Google.Apis.Core.dll
 C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Newtonsoft.Json.dll
+C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\Microsoft.Win32.SystemEvents.dll
+C:\Users\alonv\Projects\pdfReader\pdfReader\bin\x86\Debug\net6.0-windows10.0.19041.0\win10-x86\System.Drawing.Common.dll

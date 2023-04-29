@@ -27,7 +27,15 @@
               MinZoomFactor="0.5"
               MaxZoomFactor="10"
                                                        >
-            <Image x:ConnectionId='4' x:Name="PdfImage" Stretch="Uniform"                                          />
+            <Viewbox>
+
+                <Grid>
+
+                <Image x:ConnectionId='4' x:Name="PdfImage"  />
+                <Canvas x:ConnectionId='5' x:Name="DrawingCanvas" Background="Transparent"                                           FlowDirection="LeftToRight"/>
+            </Grid>
+            </Viewbox>
+
         </ScrollViewer>
     </Grid>
 </Window>
