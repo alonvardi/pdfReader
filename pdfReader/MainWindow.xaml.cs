@@ -32,6 +32,8 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using Windows.Graphics.Imaging;
+using Newtonsoft.Json;
+using static Google.Apis.Requests.BatchRequest;
 
 namespace pdfReader
 {
@@ -40,7 +42,7 @@ namespace pdfReader
 
         private int _currentPageIndex = 0;
         private PdfDocument _pdfDocument;
-
+        private static GoogleOCRResponse googleOCRResponse = null;
         public MainWindow()
         {
             this.InitializeComponent();
@@ -51,7 +53,6 @@ namespace pdfReader
         {
             void Initialize(IntPtr hwnd);
         }
-
 
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
@@ -77,7 +78,6 @@ namespace pdfReader
                 await RenderPdfPageAsync(0);
             }
         }
-
 
         private async Task RenderPdfPageAsync(int pageIndex)
         {
@@ -111,67 +111,79 @@ namespace pdfReader
             if (PdfScrollViewer.VerticalOffset == 0 && _currentPageIndex > 0)
             {
                 // Scroll to the bottom of the new page
-                PdfScrollViewer.ChangeView(null, PdfScrollViewer.ScrollableHeight, null);
+                PdfScrollViewer.ChangeView(null, PdfScrollViewer.ScrollableHeight-1, null);
 
                 // User scrolled to the top, go to the previous page
                 _currentPageIndex--;
                 await RenderPdfPageAsync(_currentPageIndex);
-
 
             }
             else if (PdfScrollViewer.VerticalOffset == PdfScrollViewer.ScrollableHeight && _currentPageIndex < _pdfDocument.PageCount - 1)
             {
 
                 // Scroll to the top of the new page
-                PdfScrollViewer.ChangeView(null, 0, null);
+                PdfScrollViewer.ChangeView(null, 1, null);
                 // User scrolled to the bottom, go to the next page
                 _currentPageIndex++;
                 await RenderPdfPageAsync(_currentPageIndex);
 
-
             }
         }
-        
-
 
         private async Task ocrWithGoogle(byte[] bitmapSource)
         {
+
+            
             string base64Image = Convert.ToBase64String(bitmapSource);
             string apiKey = "AIzaSyCx_BMdOZfxVFeObjDX1erlQDx3V6Z6ido";
             string visionApiUrl = $"https://vision.googleapis.com/v1/images:annotate?key={apiKey}";
 
             var jsonRequestData = new
             {
-                requests = new[]
-    {
-        new
-        {
-            image = new
-            {
+                requests = new[] {
+          new {
+            image = new {
                 content = base64Image
-            },
-            features = new[]
-            {
-                new
-                {
-                    type = "TEXT_DETECTION"
+              },
+              features = new [] {
+                new {
+                  type = "TEXT_DETECTION"
                 }
-            }
+              }
+          }
         }
-    }
             };
 
-            string jsonString = JsonSerializer.Serialize(jsonRequestData);
+            string jsonString = System.Text.Json.JsonSerializer.Serialize(jsonRequestData);
 
             using HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.PostAsync(
-                visionApiUrl,
-                new StringContent(jsonString, Encoding.UTF8, "application/json"));
-
+              visionApiUrl,
+              new StringContent(jsonString, Encoding.UTF8, "application/json"));
+            
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                Debug.WriteLine("OCR Response: " + responseContent);
+                try
+                {
+
+                    googleOCRResponse = JsonConvert.DeserializeObject<GoogleOCRResponse>(responseContent);
+                    googleOCRResponse.Responses[0].TextAnnotations.RemoveAt(0);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Deserialization exception: " + ex.Message);
+                }
+                if (googleOCRResponse.Responses != null && googleOCRResponse.Responses.Count > 0)
+                {
+                    foreach (TextAnnotation textAnnotation in googleOCRResponse.Responses[0].TextAnnotations)
+                    {
+                        Debug.WriteLine(textAnnotation);
+                        // Your code to process the textAnnotations
+                    }
+                }
+                //Debug.WriteLine("RESPONSE!!!! "+apiResponse.TextAnnotations[0].Description);
+                //Debug.WriteLine("OCR Response: " + responseContent);
             }
             else
             {
@@ -180,9 +192,44 @@ namespace pdfReader
 
         }
 
+        public static List<TextAnnotation> FindTextInCoordinates( int xClicked, int yClicked)
+        {
+            var result = new List<TextAnnotation>();
+            foreach (var textAnnotation in googleOCRResponse.Responses[0].TextAnnotations)
+            {
+                var xMin = textAnnotation.BoundingPoly.Vertices[0].X;
+                var yMin = textAnnotation.BoundingPoly.Vertices[0].Y;
+                var xMax = textAnnotation.BoundingPoly.Vertices[2].X;
+                var yMax = textAnnotation.BoundingPoly.Vertices[2].Y;
 
+                if (xClicked >= xMin && xClicked <= xMax && yClicked >= yMin && yClicked <= yMax)
+                {
+                    result.Add(textAnnotation);
+                }
+            }
 
+            return result;
+        }
 
+        private void PdfImage_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            var position = e.GetCurrentPoint(PdfImage).Position;
+            int x = (int)position.X;
+            int y = (int)position.Y;
+
+            // Find the text at the clicked coordinates
+            List<TextAnnotation> clickedTextAnnotations = FindTextInCoordinates( x, y);
+
+            if (clickedTextAnnotations.Count > 0)
+            {
+                var clickedText = clickedTextAnnotations[0];
+                Debug.WriteLine($"Clicked text: {clickedText.Description}, X: {clickedText.BoundingPoly.Vertices[0].X}, Y: {clickedText.BoundingPoly.Vertices[0].Y}");
+            }
+            else
+            {
+                Debug.WriteLine($"No text found at the clicked coordinates. x:{x} , y: {y}");
+            }
+        }
 
     }
 }

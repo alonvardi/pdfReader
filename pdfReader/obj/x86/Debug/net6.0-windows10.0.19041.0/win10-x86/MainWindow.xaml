@@ -27,7 +27,7 @@
               MinZoomFactor="0.5"
               MaxZoomFactor="10"
                                                        >
-            <Image x:ConnectionId='4' x:Name="PdfImage" Stretch="Uniform" />
+            <Image x:ConnectionId='4' x:Name="PdfImage" Stretch="Uniform"                                          />
         </ScrollViewer>
     </Grid>
 </Window>

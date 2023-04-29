@@ -27,7 +27,7 @@
               MinZoomFactor="0.5"
               MaxZoomFactor="10"
               ViewChanged="PdfScrollViewer_ViewChanged">
-            <Image x:Name="PdfImage" Stretch="Uniform" />
+            <Image x:Name="PdfImage" Stretch="Uniform" PointerPressed="PdfImage_PointerPressed" />
         </ScrollViewer>
     </Grid>
 </Window>
