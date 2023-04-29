@@ -42,6 +42,9 @@ using Microsoft.UI;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
+using Windows.Media.Core;
+using Windows.Media.Playback;
+using Windows.Media.SpeechSynthesis;
 
 namespace pdfReader
 {
@@ -241,6 +244,8 @@ namespace pdfReader
                 if (endOfSentence != -1)
                 {
                     markLines(saparateSentenceToLines(location, endOfSentence));
+                    
+                    SpeakText(retrieveTextFromLocation(location, endOfSentence));
                 }
             }
             else
@@ -314,23 +319,43 @@ namespace pdfReader
             }
         }
 
-/*        private Image DrawRectangleOnImage(Rectangle rect, Color color, int lineWidth)
+        private async void SpeakText(string text)
         {
-            // Create a copy of the original image to draw on
-            Image newImage = (Image)PdfImage.Clone();
-
-            // Create a Graphics object from the image
-            using (Graphics graphics = Graphics.FromImage(newImage))
+            using (var speechSynthesizer = new SpeechSynthesizer())
             {
-                // Create a Pen with the specified color and line width
-                using (Pen pen = new Pen(color, lineWidth))
-                {
-                    // Draw the rectangle on the image
-                    graphics.DrawRectangle(pen, rect);
-                }
+                var speechStream = await speechSynthesizer.SynthesizeTextToStreamAsync(text);
+                var mediaPlayer = new MediaPlayer();
+                mediaPlayer.Source = MediaSource.CreateFromStream(speechStream, speechStream.ContentType);
+                mediaPlayer.Play();
             }
+        }
 
-            return newImage;
-        }*/
+        private String retrieveTextFromLocation(int start,int end)
+        {
+            String text = null;
+            for(int i = start; i < end; i++)
+            {
+                text += " "+googleOCRResponse.Responses[0].TextAnnotations[i].Description;
+            }
+            return text;
+        }
+        /*        private Image DrawRectangleOnImage(Rectangle rect, Color color, int lineWidth)
+                {
+                    // Create a copy of the original image to draw on
+                    Image newImage = (Image)PdfImage.Clone();
+
+                    // Create a Graphics object from the image
+                    using (Graphics graphics = Graphics.FromImage(newImage))
+                    {
+                        // Create a Pen with the specified color and line width
+                        using (Pen pen = new Pen(color, lineWidth))
+                        {
+                            // Draw the rectangle on the image
+                            graphics.DrawRectangle(pen, rect);
+                        }
+                    }
+
+                    return newImage;
+                }*/
     }
 }
