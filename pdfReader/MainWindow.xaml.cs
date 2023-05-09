@@ -302,10 +302,16 @@ namespace pdfReader
                 int x, y, width, height;
                 Debug.WriteLine($"line start at {line[0]} and end at {line[1]}");
                 x = googleOCRResponse.Responses[0].TextAnnotations[line[0]].BoundingPoly.Vertices[0].X;
-                y= googleOCRResponse.Responses[0].TextAnnotations[line[0]].BoundingPoly.Vertices[0].Y;
-                width = googleOCRResponse.Responses[0].TextAnnotations[line[1]].BoundingPoly.Vertices[2].X -x;
-                height = googleOCRResponse.Responses[0].TextAnnotations[line[1]].BoundingPoly.Vertices[2].Y-y;
-                
+                y = googleOCRResponse.Responses[0].TextAnnotations[line[0]].BoundingPoly.Vertices[0].Y;
+                width = googleOCRResponse.Responses[0].TextAnnotations[line[1]].BoundingPoly.Vertices[2].X - x;
+                height = googleOCRResponse.Responses[0].TextAnnotations[line[1]].BoundingPoly.Vertices[2].Y - y;
+
+                if (width < 0 )
+                {
+                    x = googleOCRResponse.Responses[0].TextAnnotations[line[1]].BoundingPoly.Vertices[0].X;
+                    width = googleOCRResponse.Responses[0].TextAnnotations[line[0]].BoundingPoly.Vertices[2].X - x;
+                }
+
 
                 var rectangle = new Microsoft.UI.Xaml.Shapes.Rectangle
                 {
