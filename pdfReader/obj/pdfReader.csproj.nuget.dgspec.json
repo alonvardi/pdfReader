@@ -44,6 +44,14 @@
         "net6.0-windows10.0.19041": {
           "targetAlias": "net6.0-windows10.0.19041.0",
           "dependencies": {
+            "Google.Cloud.TextToSpeech.V1": {
+              "target": "Package",
+              "version": "[3.2.0, )"
+            },
+            "Google.Cloud.Vision.V1": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
             "Microsoft.Windows.SDK.BuildTools": {
               "target": "Package",
               "version": "[10.0.22621.755, )"
@@ -51,6 +59,10 @@
             "Microsoft.WindowsAppSDK": {
               "target": "Package",
               "version": "[1.2.221109.1, )"
+            },
+            "System.Windows.Extensions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [
@@ -66,44 +78,68 @@
           "warn": true,
           "downloadDependencies": [
             {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.22, 6.0.22]"
+            },
+            {
               "name": "Microsoft.AspNetCore.App.Runtime.win-arm64",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-arm64",
+              "version": "[6.0.22, 6.0.22]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[6.0.22, 6.0.22]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x86",
+              "version": "[6.0.22, 6.0.22]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-arm64",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-x64",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.NETCore.App.Runtime.win-x86",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.Windows.SDK.NET.Ref",
-              "version": "[10.0.19041.28, 10.0.19041.28]"
+              "version": "[10.0.19041.29, 10.0.19041.29]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-arm64",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-              "version": "[6.0.16, 6.0.16]"
+              "version": "[6.0.22, 6.0.22]"
             }
           ],
           "frameworkReferences": {
@@ -114,7 +150,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

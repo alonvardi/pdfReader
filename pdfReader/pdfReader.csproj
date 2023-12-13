@@ -23,8 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Cloud.TextToSpeech.V1" Version="3.2.0" />
+    <PackageReference Include="Google.Cloud.Vision.V1" Version="3.3.0" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.221109.1" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
+    <PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
     <Manifest Include="$(ApplicationManifest)" />
   </ItemGroup>
 
@@ -35,6 +38,11 @@
   -->
   <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
     <ProjectCapability Include="Msix" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="key.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <!-- 

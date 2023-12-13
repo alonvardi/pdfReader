@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "pdfviewerocr",
+  "private_key_id": "939a558359941236d0bfb99d9ae80d82e025a5b7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCWVJTYDYI6Nz8b\nk/02W5aEkZmBIhqw/QRP2OAuXfshFpiA4w7d0KDkgbz7NNoTr35+GaZpVnR1PSDk\nQZV3WB8jk6iQEkX+EzHT0IROBF+9wsJxqd+DpjzV1GtVm6k/fEmtoba+HBbuznt8\n/8ratDgmQ34DDVD0e6SJt6msauMB05G5jU8TcVrs7vSUf7TG1eUUg1m3s/LGz9tO\ncHF5SGnRS8sh9T/Me8pOoACXvFmlNR4NukuLo6yv1Emsyt1l4SRmY1A8SRMkH03T\nmCF8HLSwjS8edXDLN0vtUdh6xLhVdSx8Rzo/FlvWz/Sg4a+I1xZjY/vBjltD1Qvl\nq9qhWus3AgMBAAECggEASBIhz9jeG8HbyAFxjmtnZIQXR2EN0ddjh1JO2/vjh0/5\naiUxPeelExgd/YMvn+ttZdAvR2YS7BgT2kqU+UPundRPJk8UbkROiaF4pJyVN/kU\n1oBd75Q1q0As+zxm7lBMVGlonokB95hXfKx3WNW466NE2Pq72pIiZoH+XvJZhchn\n/+cVMTpuHRSPvrmXRhZQTgm2oUuFt7KRpwFaBTVmgGcAT/qhtQ2IwhXvJ/EtALvh\nkxkbmPnnGB+djgXlqXLWGw5YU6Ps9R+jFjm/yV/3pGJIkrg2VrOj1+IprZWuOLgD\nGX9cRGQrzpGXe0Mg+bfaxLDixojud6slZXKMBBN20QKBgQDHHIQim9CFwZoxCNW6\niuhv9xkfUY4IzKY/uY1CmWo9y/7ZImUn3CWNKPlsLD9vZsjMyrI8RNoH4fRgEoGX\n2tnk4cAwjKbVn1cLgJScEpQ3yHlBsyMVk3GqdSETrSkAP97PTKvVcat07IgORiZs\nwf/FEdTmneoi5vOd/ZbZfB8rRwKBgQDBSBtD35fgHq0XcPHQB/TBNV6OFcbi0Ut8\nz5BXDxjmTjxScKFjyQWQnLq0+sGbBPYvFxGJvc6HHhFW+DTU1OeMc1kT1MT3KGwK\nXcMViKCPew6FjhcTlDeZCld7iTuodB3GHQOYCa/6PWOpvnvzUQVn5Ed/CGffmIFb\nppDlcBVYkQKBgQCzD0EBQrDG6PG6cSCMDsmzjzsHgDdEUI6dtkeEAiWaB29bY+Qm\ncYNPq+6KykwN6hhgm1SogJ63AgvbrijfIJBdlmtY/dQ3PoFwNaTvqoGinOX3IJtH\nlv5cddNWN54svEOql1/cpsmzb9d3Rrzdh6V1W3DkKFVcJ+gkR962HTqGlwKBgE5l\nRtnS2TFIgACgCRTOBVJQqVeMMa1SIwIu1mbZcsoHNaRilrN4l88+IuTBSMHt00Tq\nYGy0Fg7r/TB/YD5rVLe9GYZXqMRvGtNhkH0te6J20T8OkQGZ/qsObMlosk/zORhg\nMFL8quoe+EujPXdFh6HKD83QxQEGRIG+H8tQGPhhAoGAHk6k9ucXP5YaguI+FjG0\nVA5MWKhYb5r43HisIUyoGndU3xP+IFnkY0TeswWQI4JuEE2KW+b8puOTy1wnE/5e\nCHAwTomJAjRgSLGChhcKL5DDGqp9RNOQXvCmN4qRpT+lzUE7Sur4IzOvWTKGxJAI\nMWwjMdkNXzxijP1JEQhaqfU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "servicename@pdfviewerocr.iam.gserviceaccount.com",
+  "client_id": "112556788922929479025",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/servicename%40pdfviewerocr.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
