@@ -152,7 +152,7 @@ namespace pdfReader
             if (ocrResponse != null && ocrResponse.Text != null)
             {
 
-                 processedWords = ProcessOcrResponse(ocrResponse);
+                processedWords = ProcessOcrResponse(ocrResponse);
 
                 // Now you can query 'processedWords' to find words at specific coordinates, etc.
 
@@ -199,14 +199,115 @@ namespace pdfReader
             Debug.WriteLine($"clicked on ({x},{y})");
 
             var word = FindWordAtCoordinates(x, y);
+
+            
             if (word != null)
             {
                 // speech
-                var segments = SegmentText(word.getText());
+                List<Word> words = findSentenceInCoordinates(x, y);
+                markLines(words);
+                var segments = SegmentText(retireveStringFromListWords(words));
+                Debug.WriteLine("Start talk");
                 await SpeakText(segments);
+                Debug.WriteLine("finish talk");
 
-                Debug.WriteLine($"{word.getText()}");
+                //Debug.WriteLine($"{word.getText()}");
             }
+        }
+
+        private void markLines(List<Word> words)
+        {
+            DrawingCanvas.Children.Clear();
+            int space = 5;
+            int x, y, width, height,startSentence=0;
+            Microsoft.UI.Xaml.Shapes.Rectangle rectangle =null;
+
+            x = words.ElementAt(0).getBoundingBox().getX1();
+            y = words.ElementAt(0).getBoundingBox().getY1();
+            width = words.ElementAt(0).getBoundingBox().getX2() - words.ElementAt(0).getBoundingBox().getX1();
+            height = words.ElementAt(0).getBoundingBox().getY2() - words.ElementAt(0).getBoundingBox().getY1();
+            Debug.WriteLine($"({x},{y}) width {width} height {height} : {words.ElementAt(0).getText()}");
+            for (int i=1; i<words.Count; i++)
+            {
+                if (words.ElementAt(i).getBoundingBox().getY1() - words.ElementAt(i - 1).getBoundingBox().getY1() > -space && (words.ElementAt(i).getBoundingBox().getY1() - words.ElementAt(i - 1).getBoundingBox().getY1()) < space)
+                {
+                    x = words.ElementAt(i).getBoundingBox().getX1();
+                    y = words.ElementAt(i).getBoundingBox().getY1();
+                    width = words.ElementAt(startSentence).getBoundingBox().getX2() - words.ElementAt(i).getBoundingBox().getX1();
+                }
+                else
+                {
+                    rectangle = new Microsoft.UI.Xaml.Shapes.Rectangle
+                    {
+                        Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(128, 255, 0, 0)),
+                        Width = width,
+                        Height = height,
+                        Margin = new Thickness(x, y, 0, 0)
+                    };
+                    DrawingCanvas.Children.Add(rectangle);
+
+                    x = words.ElementAt(i).getBoundingBox().getX1();
+                    y = words.ElementAt(i).getBoundingBox().getY1();
+                    width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(i).getBoundingBox().getX1();
+                    height = words.ElementAt(i).getBoundingBox().getY2() - words.ElementAt(i).getBoundingBox().getY1();
+                    startSentence = i;
+                }
+
+
+
+                Debug.WriteLine($"({x},{y}) width {width} height {height} : {words.ElementAt(i).getText()}");
+                Debug.WriteLine($"text- {words.ElementAt(i).getText()}(x1-{words.ElementAt(i).getBoundingBox().getX1()},y1-{words.ElementAt(i).getBoundingBox().getY1()},x2-{words.ElementAt(i).getBoundingBox().getX2()},y2-{words.ElementAt(i).getBoundingBox().getY2()})");
+
+
+            }
+            rectangle = new Microsoft.UI.Xaml.Shapes.Rectangle
+            {
+                Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(128, 255, 0, 0)),
+                Width = width,
+                Height = height,
+                Margin = new Thickness(x ,y, 0, 0)
+            };
+            DrawingCanvas.Children.Add(rectangle);
+        }
+        private String retireveStringFromListWords(List<Word> words)
+        {
+            String text="";
+            foreach (Word word in words.Take(words.Count -1))
+            {
+                if (word.getText().IndexOf(",") != -1)
+                {
+                    text += word.getText().Replace(",", "");
+                }
+                else
+                text += word.getText() + " ";
+            }
+            return text;
+            }
+        private List<Word> findSentenceInCoordinates(int x, int y)
+        {
+            var words = new List<Word>();
+
+            if (processedWords == null)
+            {
+                Debug.WriteLine("ProcessedWords NULL!");
+                return null;
+            }
+            words.Add(FindWordAtCoordinates(x, y));
+            int nextWord = processedWords.IndexOf(words.Last()) + 1;
+            while (!words.Last().getText().Contains('.') && !words.Last().getText().Contains('\n') && nextWord < processedWords.Count-1)
+            {
+                nextWord = processedWords.IndexOf(words.Last()) + 1;
+                words.Add(processedWords.ElementAt(nextWord));
+            }
+
+            //Debug.WriteLine("sentence ");
+            //print all elements 
+            foreach (Word word in words)
+            {
+                Debug.Write(word.getText()+" ");
+            }
+            Debug.WriteLine("");
+            return words;
         }
         private Word FindWordAtCoordinates(int x, int y)
         {
