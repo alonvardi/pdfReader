@@ -31,6 +31,8 @@ using Google.Cloud.Vision.V1;
 using static System.Net.Mime.MediaTypeNames;
 using Google.Cloud.TextToSpeech.V1;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Media;
 
 namespace pdfReader
 {
@@ -40,6 +42,11 @@ namespace pdfReader
         private int _currentPageIndex = 0;
         private PdfDocument _pdfDocument;
         private List<Word> processedWords;
+        private static System.Media.SoundPlayer player = null;
+        private static double speechSpeed = 1;
+        private static bool talk = false;
+        static TaskCompletionSource<bool> speechCompletionSource;
+
         public MainWindow()
         {
             string credentialsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "key.json");
@@ -117,6 +124,7 @@ namespace pdfReader
         {
             if (PdfScrollViewer.VerticalOffset == 0 && _currentPageIndex > 0)
             {
+                DrawingCanvas.Children.Clear();
                 // Scroll to the bottom of the new page
                 PdfScrollViewer.ChangeView(null, PdfScrollViewer.ScrollableHeight - 1, null);
 
@@ -128,7 +136,7 @@ namespace pdfReader
             }
             else if (PdfScrollViewer.VerticalOffset == PdfScrollViewer.ScrollableHeight && _currentPageIndex < _pdfDocument.PageCount - 1)
             {
-
+                DrawingCanvas.Children.Clear();
                 // Scroll to the top of the new page
                 PdfScrollViewer.ChangeView(null, 1, null);
                 // User scrolled to the bottom, go to the next page
@@ -179,7 +187,7 @@ namespace pdfReader
                             Word newWord = new Word(string.Join("", word.Symbols.Select(s => s.Text)), boundingBox);
                             words.Add(newWord);
 
-                            Debug.WriteLine(newWord.toString());
+                            //Debug.WriteLine(newWord.toString());
                         }
                     }
                 }
@@ -196,13 +204,12 @@ namespace pdfReader
             int x = (int)position.X;
             int y = (int)position.Y;
 
-            Debug.WriteLine($"clicked on ({x},{y})");
-
             var word = FindWordAtCoordinates(x, y);
 
-            
             if (word != null)
             {
+                Debug.WriteLine($"clicked on {word.getText()}");
+
                 // speech
                 List<Word> words = findSentenceInCoordinates(x, y);
                 markLines(words);
@@ -211,32 +218,47 @@ namespace pdfReader
                 await SpeakText(segments);
                 Debug.WriteLine("finish talk");
 
+                loopTillOver(words.Last());
+
+
+
                 //Debug.WriteLine($"{word.getText()}");
             }
         }
 
+
+
         private void markLines(List<Word> words)
         {
             DrawingCanvas.Children.Clear();
-            int space = 5;
-            int x, y, width, height,startSentence=0;
-            Microsoft.UI.Xaml.Shapes.Rectangle rectangle =null;
+            int space = 15;
+            int x, y, width, height, startSentence = 0;
+            Microsoft.UI.Xaml.Shapes.Rectangle rectangle = null;
 
             x = words.ElementAt(0).getBoundingBox().getX1();
             y = words.ElementAt(0).getBoundingBox().getY1();
             width = words.ElementAt(0).getBoundingBox().getX2() - words.ElementAt(0).getBoundingBox().getX1();
             height = words.ElementAt(0).getBoundingBox().getY2() - words.ElementAt(0).getBoundingBox().getY1();
-            Debug.WriteLine($"({x},{y}) width {width} height {height} : {words.ElementAt(0).getText()}");
-            for (int i=1; i<words.Count; i++)
+            //Debug.WriteLine($"(x1 {x},y1 {y}) (x2 {words.ElementAt(0).getBoundingBox().getX2()} y2 {words.ElementAt(0).getBoundingBox().getY2()}) : {words.ElementAt(0).getText()}");
+            for (int i = 1; i < words.Count; i++)
             {
                 if (words.ElementAt(i).getBoundingBox().getY1() - words.ElementAt(i - 1).getBoundingBox().getY1() > -space && (words.ElementAt(i).getBoundingBox().getY1() - words.ElementAt(i - 1).getBoundingBox().getY1()) < space)
                 {
                     x = words.ElementAt(i).getBoundingBox().getX1();
                     y = words.ElementAt(i).getBoundingBox().getY1();
                     width = words.ElementAt(startSentence).getBoundingBox().getX2() - words.ElementAt(i).getBoundingBox().getX1();
+                    if (width < 0)
+                    {
+                        x = words.ElementAt(startSentence).getBoundingBox().getX1();
+                        width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(0).getBoundingBox().getX1();
+
+                    }
+                    width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(startSentence).getBoundingBox().getX1();
                 }
                 else
                 {
+                    //Debug.WriteLine($"draw square from {x},{y} width {width} height {height}");
+
                     rectangle = new Microsoft.UI.Xaml.Shapes.Rectangle
                     {
                         Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(128, 255, 0, 0)),
@@ -251,38 +273,76 @@ namespace pdfReader
                     width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(i).getBoundingBox().getX1();
                     height = words.ElementAt(i).getBoundingBox().getY2() - words.ElementAt(i).getBoundingBox().getY1();
                     startSentence = i;
+                    if (width < 0)
+                    {
+                        x = words.ElementAt(startSentence).getBoundingBox().getX1();
+                        width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(0).getBoundingBox().getX1();
+
+                    }
                 }
 
 
 
-                Debug.WriteLine($"({x},{y}) width {width} height {height} : {words.ElementAt(i).getText()}");
-                Debug.WriteLine($"text- {words.ElementAt(i).getText()}(x1-{words.ElementAt(i).getBoundingBox().getX1()},y1-{words.ElementAt(i).getBoundingBox().getY1()},x2-{words.ElementAt(i).getBoundingBox().getX2()},y2-{words.ElementAt(i).getBoundingBox().getY2()})");
+                //Debug.WriteLine($"(x1 {x},y1 {y}) (x2 {words.ElementAt(i).getBoundingBox().getX2()},y2 {words.ElementAt(i).getBoundingBox().getY2()}) width {width} height {height} : {words.ElementAt(i).getText()}");
+                //Debug.WriteLine($"text- {words.ElementAt(i).getText()}(x1-{words.ElementAt(i).getBoundingBox().getX1()},y1-{words.ElementAt(i).getBoundingBox().getY1()},x2-{words.ElementAt(i).getBoundingBox().getX2()},y2-{words.ElementAt(i).getBoundingBox().getY2()})");
 
 
             }
+
+            //Debug.WriteLine($"draw square from x1 y1 {x},{y} x2 y2 {x + width} height {y + height}");
             rectangle = new Microsoft.UI.Xaml.Shapes.Rectangle
             {
                 Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(128, 255, 0, 0)),
                 Width = width,
                 Height = height,
-                Margin = new Thickness(x ,y, 0, 0)
+                Margin = new Thickness(x, y, 0, 0)
             };
             DrawingCanvas.Children.Add(rectangle);
         }
         private String retireveStringFromListWords(List<Word> words)
         {
-            String text="";
-            foreach (Word word in words.Take(words.Count -1))
+            String text = "";
+            foreach (Word word in words.Take(words.Count - 1))
             {
                 if (word.getText().IndexOf(",") != -1)
                 {
                     text += word.getText().Replace(",", "");
                 }
                 else
-                text += word.getText() + " ";
+                    text += word.getText() + " ";
             }
             return text;
+        }
+        private List<Word> findNextSentenceOfWord(Word word)
+        {
+            var words = new List<Word>();
+
+            if (processedWords == null)
+            {
+                Debug.WriteLine("ProcessedWords NULL!");
+                return null;
             }
+            int indexOfNextWord = processedWords.IndexOf(word) + 1;
+            if (indexOfNextWord >= processedWords.Count)
+                return null;
+            words.Add(processedWords.ElementAt(indexOfNextWord));
+            int nextWord = processedWords.IndexOf(words.Last()) + 1;
+
+            while (IsValidString(words.Last().getText()) && nextWord < processedWords.Count - 1)
+            {
+                nextWord = processedWords.IndexOf(words.Last()) + 1;
+                words.Add(processedWords.ElementAt(nextWord));
+            }
+
+            //Debug.WriteLine("sentence ");
+            //print all elements 
+            foreach (Word wrd in words)
+            {
+                Debug.Write(wrd.getText() + " ");
+            }
+            Debug.WriteLine("");
+            return words;
+        }
         private List<Word> findSentenceInCoordinates(int x, int y)
         {
             var words = new List<Word>();
@@ -294,7 +354,8 @@ namespace pdfReader
             }
             words.Add(FindWordAtCoordinates(x, y));
             int nextWord = processedWords.IndexOf(words.Last()) + 1;
-            while (!words.Last().getText().Contains('.') && !words.Last().getText().Contains('\n') && nextWord < processedWords.Count-1)
+
+            while (IsValidString(words.Last().getText()) && nextWord < processedWords.Count - 1)
             {
                 nextWord = processedWords.IndexOf(words.Last()) + 1;
                 words.Add(processedWords.ElementAt(nextWord));
@@ -304,10 +365,15 @@ namespace pdfReader
             //print all elements 
             foreach (Word word in words)
             {
-                Debug.Write(word.getText()+" ");
+                Debug.Write(word.getText() + " ");
             }
             Debug.WriteLine("");
             return words;
+        }
+
+        bool IsValidString(string input)
+        {
+            return !Regex.IsMatch(input, @"\.([^\s](?!.|$))*$");
         }
         private Word FindWordAtCoordinates(int x, int y)
         {
@@ -325,6 +391,23 @@ namespace pdfReader
         {
             return x >= boundingBox.getX1() && x <= boundingBox.getX2() && y >= boundingBox.getY1() && y <= boundingBox.getY2();
         }
+        private async void loopTillOver(Word word)
+        {
+            while (word != null)
+            {
+                List<Word> sentence = findNextSentenceOfWord(word);
+                if (sentence == null)
+                    break;
+                markLines(sentence);
+                var segments = SegmentText(retireveStringFromListWords(sentence));
+
+                await SpeakText(segments);
+
+                word = sentence.Last();
+
+            }
+        }
+
         static async Task SpeakText(List<(string Text, string LanguageCode)> segments)
         {
             foreach (var segment in segments)
@@ -342,14 +425,32 @@ namespace pdfReader
                 LanguageCode = languageCode,
                 SsmlGender = SsmlVoiceGender.Neutral
             };
-            var config = new AudioConfig { AudioEncoding = AudioEncoding.Linear16 };
+            var config = new AudioConfig
+            {
+                AudioEncoding = AudioEncoding.Linear16,
+                SpeakingRate = speechSpeed
+            };
             var response = await client.SynthesizeSpeechAsync(input, voice, config);
 
-            using (var stream = new MemoryStream(response.AudioContent.ToByteArray()))
+            // Create a TaskCompletionSource
+            speechCompletionSource = new TaskCompletionSource<bool>();
+
+            await Task.Run(() =>
             {
-                System.Media.SoundPlayer player = new System.Media.SoundPlayer(stream);
-                player.PlaySync(); // Play each segment synchronously
-            }
+                using (var stream = new MemoryStream(response.AudioContent.ToByteArray()))
+                {
+                    player = new SoundPlayer(stream);
+                    player.PlaySync(); // Play each segment synchronously on a separate thread
+                }
+
+                // Set the result of TaskCompletionSource to true to signify completion
+                speechCompletionSource.SetResult(true);
+
+
+            });
+
+            // Await the TaskCompletionSource
+            await speechCompletionSource.Task;
         }
 
         public static List<(string Text, string LanguageCode)> SegmentText(string mixedText)
@@ -386,6 +487,33 @@ namespace pdfReader
             // Implement a check to see if the word contains Hebrew characters
             return word.Any(c => c >= 'à' && c <= 'ú');
         }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (player != null)
+                player.Stop();
+        }
+        private void SpeechSpeedTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (double.TryParse(SpeechSpeedTextBox.Text, out double newSpeed))
+            {
+                if (newSpeed >= 0.5 && newSpeed <= 3.0)
+                {
+                    speechSpeed = newSpeed;
+                }
+                else
+                {
+                    // Handle invalid speed (outside range)
+                    SpeechSpeedTextBox.Text = speechSpeed.ToString();
+                }
+            }
+            else
+            {
+                // Handle invalid input (not a number)
+                SpeechSpeedTextBox.Text = speechSpeed.ToString();
+            }
+        }
+
 
     }
 }

@@ -18,7 +18,24 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Button x:Name="OpenFileButton" Content="Open PDF" Click="OpenFileButton_Click" HorizontalAlignment="Center" Margin="5"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Spacing="10">
+
+            <Button x:Name="OpenFileButton" Content="Open PDF" Click="OpenFileButton_Click" HorizontalAlignment="Center" Margin="5"/>
+        <Button Content="Stop" Click="StopButton_Click"/>
+
+            <TextBox x:Name="SpeechSpeedTextBox" 
+         Header="Speech Speed (0.5 - 3.0)" 
+         Text="1" 
+         PlaceholderText="Enter speed" 
+         Margin="5" 
+         Width="200" 
+         HorizontalAlignment="Center"
+         TextChanged="SpeechSpeedTextBox_TextChanged"/>
+
+
+        </StackPanel>
+
+
         <ScrollViewer x:Name="PdfScrollViewer"
               Grid.Row="1"
               HorizontalScrollBarVisibility="Auto"
