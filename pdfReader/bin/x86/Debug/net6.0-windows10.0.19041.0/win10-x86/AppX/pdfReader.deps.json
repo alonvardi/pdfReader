@@ -13,8 +13,10 @@
           "Google.Cloud.Vision.V1": "3.3.0",
           "Microsoft.Windows.SDK.BuildTools": "10.0.22621.755",
           "Microsoft.WindowsAppSDK": "1.2.221109.1",
+          "NAudio": "2.2.1",
           "System.Windows.Extensions": "8.0.0",
           "runtimepack.Microsoft.NETCore.App.Runtime.win-x86": "6.0.22",
+          "runtimepack.Microsoft.WindowsDesktop.App.Runtime.win-x86": "6.0.22",
           "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.19041.29"
         },
         "runtime": {
@@ -30,10 +32,6 @@
           "Microsoft.VisualBasic.Core.dll": {
             "assemblyVersion": "11.0.0.0",
             "fileVersion": "11.100.2223.42425"
-          },
-          "Microsoft.VisualBasic.dll": {
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "6.0.2223.42425"
           },
           "Microsoft.Win32.Primitives.dll": {
             "assemblyVersion": "6.0.0.0",
@@ -161,10 +159,6 @@
           },
           "System.Drawing.Primitives.dll": {
             "assemblyVersion": "6.0.0.0",
-            "fileVersion": "6.0.2223.42425"
-          },
-          "System.Drawing.dll": {
-            "assemblyVersion": "4.0.0.0",
             "fileVersion": "6.0.2223.42425"
           },
           "System.Dynamic.Runtime.dll": {
@@ -671,10 +665,6 @@
             "assemblyVersion": "4.0.0.0",
             "fileVersion": "6.0.2223.42425"
           },
-          "WindowsBase.dll": {
-            "assemblyVersion": "4.0.0.0",
-            "fileVersion": "6.0.2223.42425"
-          },
           "mscorlib.dll": {
             "assemblyVersion": "4.0.0.0",
             "fileVersion": "6.0.2223.42425"
@@ -858,6 +848,239 @@
           },
           "ucrtbase.dll": {
             "fileVersion": "10.0.22000.194"
+          }
+        }
+      },
+      "runtimepack.Microsoft.WindowsDesktop.App.Runtime.win-x86/6.0.22": {
+        "runtime": {
+          "Accessibility.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "DirectWriteForwarder.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "Microsoft.VisualBasic.Forms.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "Microsoft.VisualBasic.dll": {
+            "assemblyVersion": "10.1.0.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "Microsoft.Win32.Registry.AccessControl.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "Microsoft.Win32.SystemEvents.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "PresentationCore.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework-SystemCore.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework-SystemData.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework-SystemDrawing.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework-SystemXml.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework-SystemXmlLinq.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework.Aero.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework.Aero2.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework.AeroLite.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework.Classic.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework.Luna.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework.Royale.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationFramework.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationUI.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "ReachFramework.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "System.CodeDom.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Configuration.ConfigurationManager.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Design.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "System.Diagnostics.EventLog.Messages.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "0.0.0.0"
+          },
+          "System.Diagnostics.EventLog.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Diagnostics.PerformanceCounter.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.DirectoryServices.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Drawing.Common.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Drawing.Design.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "System.Drawing.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "System.IO.Packaging.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Printing.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "System.Resources.Extensions.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Security.Cryptography.Pkcs.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Security.Cryptography.ProtectedData.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Security.Cryptography.Xml.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Security.Permissions.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Threading.AccessControl.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.2223.42425"
+          },
+          "System.Windows.Controls.Ribbon.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "System.Windows.Forms.Design.Editors.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "System.Windows.Forms.Design.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "System.Windows.Forms.Primitives.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "System.Windows.Forms.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42407"
+          },
+          "System.Windows.Input.Manipulations.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "System.Windows.Presentation.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "System.Xaml.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "UIAutomationClient.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "UIAutomationClientSideProviders.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "UIAutomationProvider.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "UIAutomationTypes.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "WindowsBase.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          },
+          "WindowsFormsIntegration.dll": {
+            "assemblyVersion": "6.0.2.0",
+            "fileVersion": "6.0.2223.42502"
+          }
+        },
+        "native": {
+          "D3DCompiler_47_cor3.dll": {
+            "fileVersion": "10.0.22621.1778"
+          },
+          "PenImc_cor3.dll": {
+            "fileVersion": "6.0.2223.42502"
+          },
+          "PresentationNative_cor3.dll": {
+            "fileVersion": "6.0.23.40904"
+          },
+          "vcruntime140_cor3.dll": {
+            "fileVersion": "14.36.32532.0"
+          },
+          "wpfgfx_cor3.dll": {
+            "fileVersion": "6.0.2223.42502"
           }
         }
       },
@@ -1064,6 +1287,13 @@
           }
         }
       },
+      "Microsoft.NETCore.Platforms/3.1.0": {},
+      "Microsoft.Win32.Registry/4.7.0": {
+        "dependencies": {
+          "System.Security.AccessControl": "4.7.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        }
+      },
       "Microsoft.Windows.SDK.BuildTools/10.0.22621.755": {},
       "Microsoft.WindowsAppSDK/1.2.221109.1": {
         "dependencies": {
@@ -1133,6 +1363,87 @@
           }
         }
       },
+      "NAudio/2.2.1": {
+        "dependencies": {
+          "NAudio.Asio": "2.2.1",
+          "NAudio.Core": "2.2.1",
+          "NAudio.Midi": "2.2.1",
+          "NAudio.Wasapi": "2.2.1",
+          "NAudio.WinForms": "2.2.1",
+          "NAudio.WinMM": "2.2.1"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/NAudio.dll": {
+            "assemblyVersion": "2.2.1.0",
+            "fileVersion": "2.2.1.0"
+          }
+        }
+      },
+      "NAudio.Asio/2.2.1": {
+        "dependencies": {
+          "Microsoft.Win32.Registry": "4.7.0",
+          "NAudio.Core": "2.2.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NAudio.Asio.dll": {
+            "assemblyVersion": "2.2.1.0",
+            "fileVersion": "2.2.1.0"
+          }
+        }
+      },
+      "NAudio.Core/2.2.1": {
+        "runtime": {
+          "lib/netstandard2.0/NAudio.Core.dll": {
+            "assemblyVersion": "2.2.1.0",
+            "fileVersion": "2.2.1.0"
+          }
+        }
+      },
+      "NAudio.Midi/2.2.1": {
+        "dependencies": {
+          "NAudio.Core": "2.2.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NAudio.Midi.dll": {
+            "assemblyVersion": "2.2.1.0",
+            "fileVersion": "2.2.1.0"
+          }
+        }
+      },
+      "NAudio.Wasapi/2.2.1": {
+        "dependencies": {
+          "NAudio.Core": "2.2.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NAudio.Wasapi.dll": {
+            "assemblyVersion": "2.2.1.0",
+            "fileVersion": "2.2.1.0"
+          }
+        }
+      },
+      "NAudio.WinForms/2.2.1": {
+        "dependencies": {
+          "NAudio.WinMM": "2.2.1"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/NAudio.WinForms.dll": {
+            "assemblyVersion": "2.2.1.0",
+            "fileVersion": "2.2.1.0"
+          }
+        }
+      },
+      "NAudio.WinMM/2.2.1": {
+        "dependencies": {
+          "Microsoft.Win32.Registry": "4.7.0",
+          "NAudio.Core": "2.2.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/NAudio.WinMM.dll": {
+            "assemblyVersion": "2.2.1.0",
+            "fileVersion": "2.2.1.0"
+          }
+        }
+      },
       "Newtonsoft.Json/13.0.2": {
         "runtime": {
           "lib/net6.0/Newtonsoft.Json.dll": {
@@ -1142,6 +1453,13 @@
         }
       },
       "System.Memory/4.5.3": {},
+      "System.Security.AccessControl/4.7.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "3.1.0",
+          "System.Security.Principal.Windows": "4.7.0"
+        }
+      },
+      "System.Security.Principal.Windows/4.7.0": {},
       "System.Windows.Extensions/8.0.0": {
         "runtime": {
           "runtimes/win/lib/net6.0/System.Windows.Extensions.dll": {
@@ -1159,6 +1477,11 @@
       "sha512": ""
     },
     "runtimepack.Microsoft.NETCore.App.Runtime.win-x86/6.0.22": {
+      "type": "runtimepack",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "runtimepack.Microsoft.WindowsDesktop.App.Runtime.win-x86/6.0.22": {
       "type": "runtimepack",
       "serviceable": false,
       "sha512": ""
@@ -1287,6 +1610,20 @@
       "path": "microsoft.extensions.logging.abstractions/3.0.3",
       "hashPath": "microsoft.extensions.logging.abstractions.3.0.3.nupkg.sha512"
     },
+    "Microsoft.NETCore.Platforms/3.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
+      "path": "microsoft.netcore.platforms/3.1.0",
+      "hashPath": "microsoft.netcore.platforms.3.1.0.nupkg.sha512"
+    },
+    "Microsoft.Win32.Registry/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KSrRMb5vNi0CWSGG1++id2ZOs/1QhRqROt+qgbEAdQuGjGrFcl4AOl4/exGPUYz2wUnU42nvJqon1T3U0kPXLA==",
+      "path": "microsoft.win32.registry/4.7.0",
+      "hashPath": "microsoft.win32.registry.4.7.0.nupkg.sha512"
+    },
     "Microsoft.Windows.SDK.BuildTools/10.0.22621.755": {
       "type": "package",
       "serviceable": true,
@@ -1301,6 +1638,55 @@
       "path": "microsoft.windowsappsdk/1.2.221109.1",
       "hashPath": "microsoft.windowsappsdk.1.2.221109.1.nupkg.sha512"
     },
+    "NAudio/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-c0DzwiyyklM0TP39Y7RObwO3QkWecgM6H60ikiEnsV/aEAJPbj5MFCLaD8BSfKuZe0HGuh9GRGWWlJmSxDc9MA==",
+      "path": "naudio/2.2.1",
+      "hashPath": "naudio.2.2.1.nupkg.sha512"
+    },
+    "NAudio.Asio/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hQglyOT5iT3XuGpBP8ZG0+aoqwRfidHjTNehpoWwX0g6KJEgtH2VaqM2nuJ2mheKZa/IBqB4YQTZVvrIapzfOA==",
+      "path": "naudio.asio/2.2.1",
+      "hashPath": "naudio.asio.2.2.1.nupkg.sha512"
+    },
+    "NAudio.Core/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GgkdP6K/7FqXFo7uHvoqGZTJvW4z8g2IffhOO4JHaLzKCdDOUEzVKtveoZkCuUX8eV2HAINqi7VFqlFndrnz/g==",
+      "path": "naudio.core/2.2.1",
+      "hashPath": "naudio.core.2.2.1.nupkg.sha512"
+    },
+    "NAudio.Midi/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6r23ylGo5aeP02WFXsPquz0T0hFJWyh+7t++tz19tc3Kr38NHm+Z9j+FiAv+xkH8tZqXJqus9Q8p6u7bidIgbw==",
+      "path": "naudio.midi/2.2.1",
+      "hashPath": "naudio.midi.2.2.1.nupkg.sha512"
+    },
+    "NAudio.Wasapi/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lFfXoqacZZe0WqNChJgGYI+XV/n/61LzPHT3C1CJp4khoxeo2sziyX5wzNYWeCMNbsWxFvT3b3iXeY1UYjBhZw==",
+      "path": "naudio.wasapi/2.2.1",
+      "hashPath": "naudio.wasapi.2.2.1.nupkg.sha512"
+    },
+    "NAudio.WinForms/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DlDkewY1myY0A+3NrYRJD+MZhZV0yy1mNF6dckB27IQ9XCs/My5Ip8BZcoSHOsaPSe2GAjvoaDnk6N9w8xTv7w==",
+      "path": "naudio.winforms/2.2.1",
+      "hashPath": "naudio.winforms.2.2.1.nupkg.sha512"
+    },
+    "NAudio.WinMM/2.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xFHRFwH4x6aq3IxRbewvO33ugJRvZFEOfO62i7uQJRUNW2cnu6BeBTHUS0JD5KBucZbHZaYqxQG8dwZ47ezQuQ==",
+      "path": "naudio.winmm/2.2.1",
+      "hashPath": "naudio.winmm.2.2.1.nupkg.sha512"
+    },
     "Newtonsoft.Json/13.0.2": {
       "type": "package",
       "serviceable": true,
@@ -1314,6 +1700,20 @@
       "sha512": "sha512-3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
       "path": "system.memory/4.5.3",
       "hashPath": "system.memory.4.5.3.nupkg.sha512"
+    },
+    "System.Security.AccessControl/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JECvTt5aFF3WT3gHpfofL2MNNP6v84sxtXxpqhLBCcDRzqsPBmHhQ6shv4DwwN2tRlzsUxtb3G9M3763rbXKDg==",
+      "path": "system.security.accesscontrol/4.7.0",
+      "hashPath": "system.security.accesscontrol.4.7.0.nupkg.sha512"
+    },
+    "System.Security.Principal.Windows/4.7.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ojD0PX0XhneCsUbAZVKdb7h/70vyYMDYs85lwEI+LngEONe/17A0cFaRFqZU+sOEidcVswYWikYOQ9PPfjlbtQ==",
+      "path": "system.security.principal.windows/4.7.0",
+      "hashPath": "system.security.principal.windows.4.7.0.nupkg.sha512"
     },
     "System.Windows.Extensions/8.0.0": {
       "type": "package",

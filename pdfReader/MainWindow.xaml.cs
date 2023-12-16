@@ -33,6 +33,7 @@ using Google.Cloud.TextToSpeech.V1;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Media;
+using NAudio.Wave;
 
 namespace pdfReader
 {
@@ -42,10 +43,10 @@ namespace pdfReader
         private int _currentPageIndex = 0;
         private PdfDocument _pdfDocument;
         private List<Word> processedWords;
-        private static System.Media.SoundPlayer player = null;
         private static double speechSpeed = 1;
         private static bool talk = false;
-        static TaskCompletionSource<bool> speechCompletionSource;
+        private static IWavePlayer waveOutDevice;
+        private WaveStream audioStream;
 
         public MainWindow()
         {
@@ -215,6 +216,7 @@ namespace pdfReader
                 markLines(words);
                 var segments = SegmentText(retireveStringFromListWords(words));
                 Debug.WriteLine("Start talk");
+                talk = true;
                 await SpeakText(segments);
                 Debug.WriteLine("finish talk");
 
@@ -235,25 +237,22 @@ namespace pdfReader
             int x, y, width, height, startSentence = 0;
             Microsoft.UI.Xaml.Shapes.Rectangle rectangle = null;
 
-            x = words.ElementAt(0).getBoundingBox().getX1();
+            int minPoint = Math.Min(words.ElementAt(0).getBoundingBox().getX1(), words.ElementAt(0).getBoundingBox().getX2());
+            int maxPoint = Math.Max(words.ElementAt(0).getBoundingBox().getX1(), words.ElementAt(0).getBoundingBox().getX2());
+            x = minPoint;
             y = words.ElementAt(0).getBoundingBox().getY1();
-            width = words.ElementAt(0).getBoundingBox().getX2() - words.ElementAt(0).getBoundingBox().getX1();
+            width = maxPoint - minPoint;
             height = words.ElementAt(0).getBoundingBox().getY2() - words.ElementAt(0).getBoundingBox().getY1();
             //Debug.WriteLine($"(x1 {x},y1 {y}) (x2 {words.ElementAt(0).getBoundingBox().getX2()} y2 {words.ElementAt(0).getBoundingBox().getY2()}) : {words.ElementAt(0).getText()}");
             for (int i = 1; i < words.Count; i++)
             {
                 if (words.ElementAt(i).getBoundingBox().getY1() - words.ElementAt(i - 1).getBoundingBox().getY1() > -space && (words.ElementAt(i).getBoundingBox().getY1() - words.ElementAt(i - 1).getBoundingBox().getY1()) < space)
                 {
-                    x = words.ElementAt(i).getBoundingBox().getX1();
+                    minPoint = Math.Min(Math.Min(words.ElementAt(startSentence).getBoundingBox().getX1(), words.ElementAt(startSentence).getBoundingBox().getX2()), Math.Min(words.ElementAt(i).getBoundingBox().getX1(), words.ElementAt(i).getBoundingBox().getX2()));
+                    maxPoint = Math.Max(Math.Max(words.ElementAt(startSentence).getBoundingBox().getX1(), words.ElementAt(startSentence).getBoundingBox().getX2()), Math.Max(words.ElementAt(i).getBoundingBox().getX1(), words.ElementAt(i).getBoundingBox().getX2()));
+                    x = minPoint;
                     y = words.ElementAt(i).getBoundingBox().getY1();
-                    width = words.ElementAt(startSentence).getBoundingBox().getX2() - words.ElementAt(i).getBoundingBox().getX1();
-                    if (width < 0)
-                    {
-                        x = words.ElementAt(startSentence).getBoundingBox().getX1();
-                        width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(0).getBoundingBox().getX1();
-
-                    }
-                    width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(startSentence).getBoundingBox().getX1();
+                    width = maxPoint - minPoint;
                 }
                 else
                 {
@@ -268,17 +267,14 @@ namespace pdfReader
                     };
                     DrawingCanvas.Children.Add(rectangle);
 
-                    x = words.ElementAt(i).getBoundingBox().getX1();
+                    minPoint = Math.Min(Math.Min(words.ElementAt(startSentence).getBoundingBox().getX1(), words.ElementAt(startSentence).getBoundingBox().getX2()), Math.Min(words.ElementAt(i).getBoundingBox().getX1(), words.ElementAt(i).getBoundingBox().getX2()));
+                    maxPoint = Math.Max(Math.Max(words.ElementAt(startSentence).getBoundingBox().getX1(), words.ElementAt(startSentence).getBoundingBox().getX2()), Math.Max(words.ElementAt(i).getBoundingBox().getX1(), words.ElementAt(i).getBoundingBox().getX2()));
+                    x = minPoint;
                     y = words.ElementAt(i).getBoundingBox().getY1();
-                    width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(i).getBoundingBox().getX1();
+                    width = maxPoint - minPoint;
                     height = words.ElementAt(i).getBoundingBox().getY2() - words.ElementAt(i).getBoundingBox().getY1();
                     startSentence = i;
-                    if (width < 0)
-                    {
-                        x = words.ElementAt(startSentence).getBoundingBox().getX1();
-                        width = words.ElementAt(i).getBoundingBox().getX2() - words.ElementAt(0).getBoundingBox().getX1();
 
-                    }
                 }
 
 
@@ -391,9 +387,9 @@ namespace pdfReader
         {
             return x >= boundingBox.getX1() && x <= boundingBox.getX2() && y >= boundingBox.getY1() && y <= boundingBox.getY2();
         }
-        private async void loopTillOver(Word word)
+       private async void loopTillOver(Word word)
         {
-            while (word != null)
+            while (word != null && talk)
             {
                 List<Word> sentence = findNextSentenceOfWord(word);
                 if (sentence == null)
@@ -406,6 +402,8 @@ namespace pdfReader
                 word = sentence.Last();
 
             }
+            //clear mark
+            DrawingCanvas.Children.Clear();
         }
 
         static async Task SpeakText(List<(string Text, string LanguageCode)> segments)
@@ -432,27 +430,24 @@ namespace pdfReader
             };
             var response = await client.SynthesizeSpeechAsync(input, voice, config);
 
-            // Create a TaskCompletionSource
-            speechCompletionSource = new TaskCompletionSource<bool>();
-
-            await Task.Run(() =>
-            {
-                using (var stream = new MemoryStream(response.AudioContent.ToByteArray()))
-                {
-                    player = new SoundPlayer(stream);
-                    player.PlaySync(); // Play each segment synchronously on a separate thread
-                }
-
-                // Set the result of TaskCompletionSource to true to signify completion
-                speechCompletionSource.SetResult(true);
-
-
-            });
-
-            // Await the TaskCompletionSource
-            await speechCompletionSource.Task;
+            // Play the audio
+            await PlayAudioAsync(response.AudioContent.ToByteArray());
         }
+        private static async Task PlayAudioAsync(byte[] audioData)
+        {
+            using (var ms = new MemoryStream(audioData))
+            using (var rdr = new RawSourceWaveStream(ms, new WaveFormat(12000, 32,1)))
+            using (waveOutDevice = new WaveOutEvent())
+            {
+                waveOutDevice.Init(rdr);
+                waveOutDevice.Play();
 
+                while (waveOutDevice.PlaybackState == PlaybackState.Playing)
+                {
+                    await Task.Delay(100); // Wait for the playback to finish
+                }
+            }
+        }
         public static List<(string Text, string LanguageCode)> SegmentText(string mixedText)
         {
             var segments = new List<(string Text, string LanguageCode)>();
@@ -490,8 +485,8 @@ namespace pdfReader
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            if (player != null)
-                player.Stop();
+            talk = false;
+            waveOutDevice?.Stop();
         }
         private void SpeechSpeedTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -514,6 +509,29 @@ namespace pdfReader
             }
         }
 
+
+/*        // save audio to file 
+        static async Task SynthesizeAndSaveSegment(string text, string languageCode, string audioFilePath)
+        {
+            TextToSpeechClient client = TextToSpeechClient.Create();
+            var input = new SynthesisInput { Text = text };
+            var voice = new VoiceSelectionParams
+            {
+                LanguageCode = languageCode,
+                SsmlGender = SsmlVoiceGender.Neutral
+            };
+            var config = new AudioConfig
+            {
+                AudioEncoding = AudioEncoding.Linear16,
+                SpeakingRate = speechSpeed
+            };
+            var response = await client.SynthesizeSpeechAsync(input, voice, config);
+
+            using (var fileStream = new FileStream(audioFilePath, FileMode.Create, FileAccess.Write))
+            {
+                fileStream.Write(response.AudioContent.ToByteArray());
+            }
+        }*/
 
     }
 }

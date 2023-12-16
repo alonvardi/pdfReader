@@ -60,6 +60,10 @@
               "target": "Package",
               "version": "[1.2.221109.1, )"
             },
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            },
             "System.Windows.Extensions": {
               "target": "Package",
               "version": "[8.0.0, )"
